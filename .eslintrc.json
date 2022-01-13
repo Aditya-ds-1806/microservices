@@ -15,6 +15,12 @@
             "error",
             4
         ],
-        "no-console": "off"
+        "no-console": "off",
+        "import/extensions": [
+            "error",
+            {
+                "js": "ignorePackages"
+            }
+        ]
     }
 }
