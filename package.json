@@ -9,7 +9,9 @@
   "author": "Aditya D.S.",
   "license": "ISC",
   "dependencies": {
+    "csvtojson": "^2.0.10",
     "express": "^4.17.2",
+    "express-fileupload": "^1.2.1",
     "mongoose": "^6.1.6",
     "node-fetch": "^3.1.0"
   },
