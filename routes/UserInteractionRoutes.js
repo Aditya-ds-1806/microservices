@@ -8,7 +8,7 @@ UserInteractionRouter.get('/content/reads/:contentId', async (req, res) => {
     // retrieve read count
     try {
         const { contentId } = req.params;
-        const reads = await UserInteraction.findOne({ contentId }, { read: 1 });
+        const reads = await UserInteraction.findOne({ contentId }, { reads: 1 });
         res.send({
             status: 'success',
             data: {
@@ -31,7 +31,7 @@ UserInteractionRouter.put('/content/reads/:contentId', async (req, res) => {
         const { contentId } = req.params;
         const userId = mongoose.Types.ObjectId(req.query.userId);
         const reads = await UserInteraction.findOneAndUpdate({ contentId }, {
-            $addToSet: { read: userId },
+            $addToSet: { reads: userId },
         }, { new: true, upsert: true });
         res.send({
             status: 'success',
