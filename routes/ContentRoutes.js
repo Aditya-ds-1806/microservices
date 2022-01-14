@@ -55,7 +55,6 @@ ContentRouter.post('/content', async (req, res) => {
     // create book entry
     try {
         const { content, publishedDate, userId } = req.body;
-        console.log(req.body);
         const newBook = await Book.create({
             content,
             publishedDate,
@@ -96,7 +95,11 @@ ContentRouter.put('/content/:bookId', async (req, res) => {
     try {
         const { content } = req.body;
         const { bookId } = req.params;
-        const newBook = await Book.findByIdAndUpdate(bookId, { content }, { new: true });
+        const updates = Object.entries(content).reduce((acc, [key, val]) => {
+            acc[`content.${key}`] = val;
+            return acc;
+        }, {});
+        const newBook = await Book.findByIdAndUpdate(bookId, updates, { new: true });
         res.send({
             status: 'success',
             data: newBook,
