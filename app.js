@@ -4,18 +4,30 @@ import UserInteractionRouter from './routes/UserInteractionRoutes.js';
 import ContentRouter from './routes/ContentRoutes.js';
 import UserRouter from './routes/UserRoutes.js';
 
-const app = express();
+const contentService = express();
+const userInteractionService = express();
+const userService = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(UserInteractionRouter);
-app.use(ContentRouter);
-app.use(UserRouter);
+contentService.use(express.json());
+contentService.use(express.urlencoded({ extended: true }));
+contentService.use(ContentRouter);
 
-app.get('/', async (req, res) => {
-    res.send('Hello world!');
+userInteractionService.use(express.json());
+userInteractionService.use(express.urlencoded({ extended: true }));
+userInteractionService.use(UserInteractionRouter);
+
+userService.use(express.json());
+userService.use(express.urlencoded({ extended: true }));
+userService.use(UserRouter);
+
+contentService.listen(3000, process.env.IP, () => {
+    console.log('Content service started: http://localhost:3000');
 });
 
-app.listen(process.env.PORT || 3000, process.env.IP, () => {
-    console.log(`Server started: http://localhost:${process.env.PORT || 3000}`);
+userInteractionService.listen(3001, process.env.IP, () => {
+    console.log('User interaction service started: http://localhost:3001');
+});
+
+userService.listen(3002, process.env.IP, () => {
+    console.log('User service started: http://localhost:3002');
 });
