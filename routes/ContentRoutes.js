@@ -1,8 +1,14 @@
 import { Router } from 'express';
 import fileUpload from 'express-fileupload';
 import csv from 'csvtojson';
+import dotenv from 'dotenv';
+import totp from 'totp-generator';
+import fetch from 'node-fetch';
 import { Book } from '../models/Content.js';
 
+dotenv.config({ path: 'routes/.env' });
+
+const { TOTP_KEY } = process.env;
 const ContentRouter = new Router();
 ContentRouter.use(fileUpload());
 
@@ -36,12 +42,34 @@ ContentRouter.put('/content', async (req, res) => {
 
 ContentRouter.get('/content', async (req, res) => {
     // list all contents based on sorting order specified in query parameter
+    const { sort } = req.query;
     try {
-        const books = await Book.find({}, { content: 1 }).sort({ publishedDate: -1 }).exec();
-        res.send({
-            status: 'success',
-            data: books,
-        });
+        if (sort === 'new') {
+            const books = await Book.find({}, { content: 1 }).sort({ publishedDate: -1 }).exec();
+            res.send({
+                status: 'success',
+                data: books,
+            });
+        } else if (sort === 'top') {
+            const token = totp(TOTP_KEY);
+            const response = await (await fetch('http://localhost:3001/content/stats', {
+                headers: {
+                    'X-TOTP': token,
+                    'X-TOTP-Generation-Timestamp': Date.now(),
+                },
+            })).json();
+            if (response.status === 'fail') {
+                res.send(response);
+                return;
+            }
+            const { data: scores } = response;
+            const { data: books } = await (await fetch('http://localhost:3000/content?sort=new')).json();
+            books.sort((book1, book2) => (scores[book2._id] ?? 0) - (scores[book1._id] ?? 0));
+            res.send({
+                status: 'success',
+                data: books,
+            });
+        }
     } catch (err) {
         console.log(err);
         res.send({
