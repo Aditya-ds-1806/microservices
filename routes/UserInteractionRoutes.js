@@ -1,7 +1,13 @@
 import { Router } from 'express';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import totp from 'totp-generator';
+
 import { UserInteraction } from '../models/UserInteraction.js';
 
+dotenv.config({ path: 'routes/.env' });
+
+const { TOTP_KEY } = process.env;
 const UserInteractionRouter = new Router();
 
 UserInteractionRouter.get('/content/reads/:contentId', async (req, res) => {
@@ -85,6 +91,39 @@ UserInteractionRouter.put('/content/likes/:contentId', async (req, res) => {
             status: 'success',
             data: likes,
         });
+    } catch (err) {
+        console.log(err);
+        res.send({
+            status: 'error',
+            message: err.message,
+        });
+    }
+});
+
+UserInteractionRouter.get('/content/stats', async (req, res) => {
+    try {
+        const receivedTotp = req.headers['x-totp'];
+        const totpTimestamp = req.headers['x-totp-generation-timestamp'];
+        const calculatedTotp = totp(TOTP_KEY, { timestamp: totpTimestamp });
+        if (receivedTotp === calculatedTotp) {
+            const stats = await UserInteraction.aggregate().match({}).project({ likes: { $size: '$likes' }, reads: { $size: '$reads' }, contentId: 1 }).exec();
+            const topMetric = stats.reduce((acc, { likes, reads, contentId }) => {
+                acc[contentId] = likes + reads;
+                return acc;
+            }, {});
+            res.send({
+                status: 'success',
+                data: topMetric,
+            });
+        } else {
+            res.send({
+                status: 'fail',
+                data: {
+                    receivedTotp,
+                    message: 'Authentication failure! Invalid TOTP received.',
+                },
+            });
+        }
     } catch (err) {
         console.log(err);
         res.send({
