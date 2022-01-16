@@ -6,7 +6,6 @@ import totp from 'totp-generator';
 import fetch from 'node-fetch';
 import { Book } from '../models/Content.js';
 import ContentMiddleware from '../middleware/Content.js';
-import UserMiddleware from '../middleware/User.js';
 
 dotenv.config({ path: 'routes/.env' });
 
@@ -81,7 +80,7 @@ ContentRouter.get('/content', async (req, res) => {
     }
 });
 
-ContentRouter.post('/content', UserMiddleware.exists, async (req, res) => {
+ContentRouter.post('/content', ContentMiddleware.existsUser, async (req, res) => {
     // create book entry
     try {
         const { content, publishedDate, userId } = req.body;
