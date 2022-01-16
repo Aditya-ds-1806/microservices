@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import totp from 'totp-generator';
 import fetch from 'node-fetch';
 import { Book } from '../models/Content.js';
+import ContentMiddleware from '../middleware/Content.js';
+import UserMiddleware from '../middleware/User.js';
 
 dotenv.config({ path: 'routes/.env' });
 
@@ -79,7 +81,7 @@ ContentRouter.get('/content', async (req, res) => {
     }
 });
 
-ContentRouter.post('/content', async (req, res) => {
+ContentRouter.post('/content', UserMiddleware.exists, async (req, res) => {
     // create book entry
     try {
         const { content, publishedDate, userId } = req.body;
@@ -100,7 +102,7 @@ ContentRouter.post('/content', async (req, res) => {
     }
 });
 
-ContentRouter.get('/content/:contentId', async (req, res) => {
+ContentRouter.get('/content/:contentId', ContentMiddleware.exists, async (req, res) => {
     // read book entry
     try {
         const { contentId } = req.params;
@@ -118,7 +120,7 @@ ContentRouter.get('/content/:contentId', async (req, res) => {
     }
 });
 
-ContentRouter.put('/content/:contentId', async (req, res) => {
+ContentRouter.put('/content/:contentId', ContentMiddleware.exists, async (req, res) => {
     // update book entry
     try {
         const { content } = req.body;
@@ -140,7 +142,7 @@ ContentRouter.put('/content/:contentId', async (req, res) => {
     }
 });
 
-ContentRouter.delete('/content/:contentId', async (req, res) => {
+ContentRouter.delete('/content/:contentId', ContentMiddleware.exists, async (req, res) => {
     // delete book entry
     try {
         const { contentId } = req.params;
