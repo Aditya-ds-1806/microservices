@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { Book } from '../models/Content.js';
 
 export default class ContentMiddleware {
-    static async exists(req, res, next) {
+    static async existsContent(req, res, next) {
         try {
             const contentId = mongoose.Types.ObjectId(req.params.contentId);
             if (await Book.exists({ _id: contentId })) {

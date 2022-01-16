@@ -102,7 +102,7 @@ ContentRouter.post('/content', UserMiddleware.exists, async (req, res) => {
     }
 });
 
-ContentRouter.get('/content/:contentId', ContentMiddleware.exists, async (req, res) => {
+ContentRouter.get('/content/:contentId', ContentMiddleware.existsContent, async (req, res) => {
     // read book entry
     try {
         const { contentId } = req.params;
@@ -120,7 +120,7 @@ ContentRouter.get('/content/:contentId', ContentMiddleware.exists, async (req, r
     }
 });
 
-ContentRouter.put('/content/:contentId', ContentMiddleware.exists, async (req, res) => {
+ContentRouter.put('/content/:contentId', ContentMiddleware.existsContent, async (req, res) => {
     // update book entry
     try {
         const { content } = req.body;
@@ -142,7 +142,7 @@ ContentRouter.put('/content/:contentId', ContentMiddleware.exists, async (req, r
     }
 });
 
-ContentRouter.delete('/content/:contentId', ContentMiddleware.exists, async (req, res) => {
+ContentRouter.delete('/content/:contentId', ContentMiddleware.existsContent, async (req, res) => {
     // delete book entry
     try {
         const { contentId } = req.params;
