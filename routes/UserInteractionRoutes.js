@@ -1,14 +1,13 @@
 import { Router } from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import totp from 'totp-generator';
 import { UserInteraction } from '../models/UserInteraction.js';
 import User from '../middleware/User.js';
 import Content from '../middleware/Content.js';
+import UserInteractionMiddleware from '../middleware/UserInteraction.js';
 
 dotenv.config({ path: 'routes/.env' });
 
-const { TOTP_KEY } = process.env;
 const UserInteractionRouter = new Router();
 
 UserInteractionRouter.get('/content/reads/:contentId', Content.exists, async (req, res) => {
@@ -101,30 +100,17 @@ UserInteractionRouter.put('/content/likes/:contentId', User.exists, Content.exis
     }
 });
 
-UserInteractionRouter.get('/content/stats', async (req, res) => {
+UserInteractionRouter.get('/content/stats', UserInteractionMiddleware.checkTOTP, async (req, res) => {
     try {
-        const receivedTotp = req.headers['x-totp'];
-        const totpTimestamp = req.headers['x-totp-generation-timestamp'];
-        const calculatedTotp = totp(TOTP_KEY, { timestamp: totpTimestamp });
-        if (receivedTotp === calculatedTotp) {
-            const stats = await UserInteraction.aggregate().match({}).project({ likes: { $size: '$likes' }, reads: { $size: '$reads' }, contentId: 1 }).exec();
-            const topMetric = stats.reduce((acc, { likes, reads, contentId }) => {
-                acc[contentId] = likes + reads;
-                return acc;
-            }, {});
-            res.send({
-                status: 'success',
-                data: topMetric,
-            });
-        } else {
-            res.send({
-                status: 'fail',
-                data: {
-                    receivedTotp,
-                    message: 'Authentication failure! Invalid TOTP received.',
-                },
-            });
-        }
+        const stats = await UserInteraction.aggregate().match({}).project({ likes: { $size: '$likes' }, reads: { $size: '$reads' }, contentId: 1 }).exec();
+        const topMetric = stats.reduce((acc, { likes, reads, contentId }) => {
+            acc[contentId] = likes + reads;
+            return acc;
+        }, {});
+        res.send({
+            status: 'success',
+            data: topMetric,
+        });
     } catch (err) {
         console.log(err);
         res.send({
