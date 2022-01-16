@@ -2,15 +2,16 @@ import { Router } from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import totp from 'totp-generator';
-
 import { UserInteraction } from '../models/UserInteraction.js';
+import User from '../middleware/User.js';
+import Content from '../middleware/Content.js';
 
 dotenv.config({ path: 'routes/.env' });
 
 const { TOTP_KEY } = process.env;
 const UserInteractionRouter = new Router();
 
-UserInteractionRouter.get('/content/reads/:contentId', async (req, res) => {
+UserInteractionRouter.get('/content/reads/:contentId', Content.exists, async (req, res) => {
     // retrieve read count
     try {
         const { contentId } = req.params;
@@ -31,7 +32,7 @@ UserInteractionRouter.get('/content/reads/:contentId', async (req, res) => {
     }
 });
 
-UserInteractionRouter.put('/content/reads/:contentId', async (req, res) => {
+UserInteractionRouter.put('/content/reads/:contentId', User.exists, Content.exists, async (req, res) => {
     // update read count
     try {
         const { contentId } = req.params;
@@ -52,7 +53,7 @@ UserInteractionRouter.put('/content/reads/:contentId', async (req, res) => {
     }
 });
 
-UserInteractionRouter.get('/content/likes/:contentId', async (req, res) => {
+UserInteractionRouter.get('/content/likes/:contentId', Content.exists, async (req, res) => {
     // retrieve like count
     try {
         const { contentId } = req.params;
@@ -73,7 +74,7 @@ UserInteractionRouter.get('/content/likes/:contentId', async (req, res) => {
     }
 });
 
-UserInteractionRouter.put('/content/likes/:contentId', async (req, res) => {
+UserInteractionRouter.put('/content/likes/:contentId', User.exists, Content.exists, async (req, res) => {
     // update like count
     try {
         const { contentId } = req.params;
