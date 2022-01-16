@@ -12,9 +12,8 @@ export default class UserMiddleware {
             }
             res.send({
                 status: 'fail',
-                data: {
-                    message: `No User with id: ${userId} exists.`,
-                },
+                data: null,
+                message: `No User with id: ${userId} exists.`,
             });
         } catch (err) {
             console.log(err);

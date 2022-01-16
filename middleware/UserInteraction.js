@@ -17,8 +17,8 @@ export default class UserInteractionMiddleware {
                 status: 'fail',
                 data: {
                     receivedTotp,
-                    message: 'Authentication failure! Invalid TOTP received.',
                 },
+                message: 'Authentication failure! Invalid TOTP received.',
             });
         }
     }

@@ -12,9 +12,8 @@ export default class ContentMiddleware {
             }
             res.send({
                 status: 'fail',
-                data: {
-                    message: `No book with id: ${contentId} exists.`,
-                },
+                data: null,
+                message: `No book with id: ${contentId} exists.`,
             });
         } catch (err) {
             console.log(err);
