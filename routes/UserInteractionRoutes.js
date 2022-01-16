@@ -2,15 +2,13 @@ import { Router } from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { UserInteraction } from '../models/UserInteraction.js';
-import User from '../middleware/User.js';
-import Content from '../middleware/Content.js';
 import UserInteractionMiddleware from '../middleware/UserInteraction.js';
 
 dotenv.config({ path: 'routes/.env' });
 
 const UserInteractionRouter = new Router();
 
-UserInteractionRouter.get('/content/reads/:contentId', Content.exists, async (req, res) => {
+UserInteractionRouter.get('/content/reads/:contentId', UserInteractionMiddleware.existsContent, async (req, res) => {
     // retrieve read count
     try {
         const { contentId } = req.params;
@@ -31,7 +29,7 @@ UserInteractionRouter.get('/content/reads/:contentId', Content.exists, async (re
     }
 });
 
-UserInteractionRouter.put('/content/reads/:contentId', User.exists, Content.exists, async (req, res) => {
+UserInteractionRouter.put('/content/reads/:contentId', UserInteractionMiddleware.existsUser, UserInteractionMiddleware.existsContent, async (req, res) => {
     // update read count
     try {
         const { contentId } = req.params;
@@ -52,7 +50,7 @@ UserInteractionRouter.put('/content/reads/:contentId', User.exists, Content.exis
     }
 });
 
-UserInteractionRouter.get('/content/likes/:contentId', Content.exists, async (req, res) => {
+UserInteractionRouter.get('/content/likes/:contentId', UserInteractionMiddleware.existsContent, async (req, res) => {
     // retrieve like count
     try {
         const { contentId } = req.params;
@@ -73,7 +71,7 @@ UserInteractionRouter.get('/content/likes/:contentId', Content.exists, async (re
     }
 });
 
-UserInteractionRouter.put('/content/likes/:contentId', User.exists, Content.exists, async (req, res) => {
+UserInteractionRouter.put('/content/likes/:contentId', UserInteractionMiddleware.existsUser, UserInteractionMiddleware.existsContent, async (req, res) => {
     // update like count
     try {
         const { contentId } = req.params;
