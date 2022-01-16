@@ -4,7 +4,7 @@ import { User } from '../models/User.js';
 export default class UserMiddleware {
     static async exists(req, res, next) {
         try {
-            const userId = mongoose.Types.ObjectId(req.query.userId);
+            const userId = mongoose.Types.ObjectId(req.query.userId ?? req.params.userId);
             if (await User.exists({ _id: userId })) {
                 next();
                 return;
