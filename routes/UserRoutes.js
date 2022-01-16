@@ -28,7 +28,7 @@ UserRouter.post('/users', async (req, res) => {
     }
 });
 
-UserRouter.get('/users/:userId', UserMiddleware.exists, async (req, res) => {
+UserRouter.get('/users/:userId', UserMiddleware.existsUser, async (req, res) => {
     try {
         const { userId } = req.params;
         const user = await User.findById(userId);
@@ -45,7 +45,7 @@ UserRouter.get('/users/:userId', UserMiddleware.exists, async (req, res) => {
     }
 });
 
-UserRouter.put('/users/:userId', UserMiddleware.exists, async (req, res) => {
+UserRouter.put('/users/:userId', UserMiddleware.existsUser, async (req, res) => {
     try {
         const { userId } = req.params;
         const updatedUser = await User.findByIdAndUpdate(userId, req.body, { new: true });
@@ -62,7 +62,7 @@ UserRouter.put('/users/:userId', UserMiddleware.exists, async (req, res) => {
     }
 });
 
-UserRouter.delete('/users/:userId', UserMiddleware.exists, async (req, res) => {
+UserRouter.delete('/users/:userId', UserMiddleware.existsUser, async (req, res) => {
     try {
         const { userId } = req.params;
         const deletedUser = await User.findByIdAndDelete(userId);

@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { User } from '../models/User.js';
 
 export default class UserMiddleware {
-    static async exists(req, res, next) {
+    static async existsUser(req, res, next) {
         try {
             let userId = req.query.userId ?? req.params.userId ?? req.body.userId;
             userId = mongoose.Types.ObjectId(userId);
