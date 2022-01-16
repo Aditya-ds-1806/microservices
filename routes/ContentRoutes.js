@@ -100,11 +100,11 @@ ContentRouter.post('/content', async (req, res) => {
     }
 });
 
-ContentRouter.get('/content/:bookId', async (req, res) => {
+ContentRouter.get('/content/:contentId', async (req, res) => {
     // read book entry
     try {
-        const { bookId } = req.params;
-        const book = await Book.findById(bookId, { content: 1 });
+        const { contentId } = req.params;
+        const book = await Book.findById(contentId, { content: 1 });
         res.send({
             status: 'success',
             data: book,
@@ -118,16 +118,16 @@ ContentRouter.get('/content/:bookId', async (req, res) => {
     }
 });
 
-ContentRouter.put('/content/:bookId', async (req, res) => {
+ContentRouter.put('/content/:contentId', async (req, res) => {
     // update book entry
     try {
         const { content } = req.body;
-        const { bookId } = req.params;
+        const { contentId } = req.params;
         const updates = Object.entries(content).reduce((acc, [key, val]) => {
             acc[`content.${key}`] = val;
             return acc;
         }, {});
-        const newBook = await Book.findByIdAndUpdate(bookId, updates, { new: true });
+        const newBook = await Book.findByIdAndUpdate(contentId, updates, { new: true });
         res.send({
             status: 'success',
             data: newBook,
@@ -140,11 +140,11 @@ ContentRouter.put('/content/:bookId', async (req, res) => {
     }
 });
 
-ContentRouter.delete('/content/:bookId', async (req, res) => {
+ContentRouter.delete('/content/:contentId', async (req, res) => {
     // delete book entry
     try {
-        const { bookId } = req.params;
-        const newBook = await Book.findByIdAndDelete(bookId);
+        const { contentId } = req.params;
+        const newBook = await Book.findByIdAndDelete(contentId);
         res.send({
             status: 'success',
             data: newBook,
