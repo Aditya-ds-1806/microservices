@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import totp from 'totp-generator';
 import fetch from 'node-fetch';
+import ApiError from './Error.js';
 
 dotenv.config({ path: 'routes/.env' });
 
@@ -14,49 +15,37 @@ export default class UserInteractionMiddleware {
         if (calculatedTotp === receivedTotp) {
             next();
         } else {
-            res.send({
-                status: 'fail',
-                data: {
-                    receivedTotp,
-                },
-                message: 'Authentication failure! Invalid TOTP received.',
-            });
+            next(new ApiError('fail', { receivedTotp }, 'Authentication failure! Invalid TOTP received.'));
         }
     }
 
     static async existsUser(req, res, next) {
-        try {
-            const { userId } = req.query;
-            const response = await (await fetch(`http://localhost:3002/users/${userId}`)).json();
-            if (response.data) {
-                next();
-                return;
-            }
-            res.send(response);
-        } catch (err) {
-            console.log(err);
-            res.send({
-                status: 'error',
-                message: err.message,
-            });
+        const { userId } = req.query;
+        const response = await (await fetch(`http://localhost:3002/users/${userId}`)).json();
+        if (response.data) {
+            next();
+            return;
         }
+        res.send(response);
     }
 
     static async existsContent(req, res, next) {
-        try {
-            const { contentId } = req.params;
-            const response = await (await fetch(`http://localhost:3000/content/${contentId}`)).json();
-            if (response.data) {
-                next();
-                return;
-            }
-            res.send(response);
-        } catch (err) {
-            console.log(err);
-            res.send({
-                status: 'error',
-                message: err.message,
-            });
+        const { contentId } = req.params;
+        const response = await (await fetch(`http://localhost:3000/content/${contentId}`)).json();
+        if (response.data) {
+            next();
+            return;
         }
+        res.send(response);
+    }
+
+    // eslint-disable-next-line no-unused-vars
+    static errorHandler(err, req, res, next) {
+        console.log(err);
+        res.send({
+            status: err.statusText ?? 'fail',
+            message: err.message ?? 'Internal server error',
+            data: err.data ?? null,
+        });
     }
 }
