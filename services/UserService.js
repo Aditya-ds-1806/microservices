@@ -15,7 +15,7 @@ export default class UserService {
 
         app.get('*', (req, res) => res.send('404 Not Found!'));
 
-        app.listen(this.port, process.env.IP, () => {
+        return app.listen(this.port, process.env.IP, () => {
             console.log(`User service started: http://localhost:${this.port}`);
         });
     }
