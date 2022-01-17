@@ -1,15 +1,17 @@
 import { Router } from 'express';
 import UserMiddleware from '../middleware/User.js';
+import UserController from '../controllers/UserControllers.js';
 
+const { existsUser } = UserMiddleware;
 const {
-    createUserHandler, readUserHandler, existsUser, updateUserHandler, deleteUserHandler,
-} = UserMiddleware;
+    createUser, readUser, updateUser, deleteUser,
+} = UserController;
 
 const UserRouter = new Router();
 
-UserRouter.post('/users', createUserHandler);
-UserRouter.get('/users/:userId', existsUser, readUserHandler);
-UserRouter.put('/users/:userId', existsUser, updateUserHandler);
-UserRouter.delete('/users/:userId', existsUser, deleteUserHandler);
+UserRouter.post('/users', createUser);
+UserRouter.get('/users/:userId', existsUser, readUser);
+UserRouter.put('/users/:userId', existsUser, updateUser);
+UserRouter.delete('/users/:userId', existsUser, deleteUser);
 
 export default UserRouter;
