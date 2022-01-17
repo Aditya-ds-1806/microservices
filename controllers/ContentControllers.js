@@ -34,14 +34,18 @@ export default class ContentControllers {
         }
     }
 
+    static #sortContentByNew() {
+        return Book
+            .find({}, { content: 1 })
+            .sort({ publishedDate: -1 })
+            .exec();
+    }
+
     static async listAllContent(req, res) {
         const { sort } = req.query;
         try {
             if (sort === 'new') {
-                const books = await Book
-                    .find({}, { content: 1 })
-                    .sort({ publishedDate: -1 })
-                    .exec();
+                const books = await ContentControllers.#sortContentByNew();
                 res.send({
                     status: 'success',
                     data: books,
@@ -59,7 +63,7 @@ export default class ContentControllers {
                     return;
                 }
                 const { data: scores } = response;
-                const { data: books } = await (await fetch('http://localhost:3000/content?sort=new')).json();
+                const books = await ContentControllers.#sortContentByNew();
                 books.sort((book1, book2) => (scores[book2._id] ?? 0) - (scores[book1._id] ?? 0));
                 res.send({
                     status: 'success',
