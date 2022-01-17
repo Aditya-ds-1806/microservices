@@ -1,37 +1,30 @@
 import csv from 'csvtojson';
 import fetch from 'node-fetch';
 import totp from 'totp-generator';
+import ApiError from '../middleware/Error.js';
 import { Book } from '../models/Content.js';
 
 const { TOTP_KEY } = process.env;
 
 export default class ContentControllers {
     static async bulkInsert(req, res) {
-        try {
-            const csvString = req.files.file.data.toString('utf8');
-            const books = (await csv().fromString(csvString)).reduce((acc, book) => {
-                acc.push({
-                    userId: book.userId,
-                    content: {
-                        title: book.title,
-                        story: book.story,
-                    },
-                    publishedDate: book.publishedDate,
-                });
-                return acc;
-            }, []);
-            const newBooks = await Book.insertMany(books);
-            res.send({
-                status: 'success',
-                data: newBooks,
+        const csvString = req.files.file.data.toString('utf8');
+        const books = (await csv().fromString(csvString)).reduce((acc, book) => {
+            acc.push({
+                userId: book.userId,
+                content: {
+                    title: book.title,
+                    story: book.story,
+                },
+                publishedDate: book.publishedDate,
             });
-        } catch (err) {
-            console.log(err);
-            res.send({
-                status: 'error',
-                message: err.message,
-            });
-        }
+            return acc;
+        }, []);
+        const newBooks = await Book.insertMany(books);
+        res.send({
+            status: 'success',
+            data: newBooks,
+        });
     }
 
     static #sortContentByNew() {
@@ -41,115 +34,78 @@ export default class ContentControllers {
             .exec();
     }
 
-    static async listAllContent(req, res) {
+    static async listAllContent(req, res, next) {
         const { sort } = req.query;
-        try {
-            if (sort === 'new') {
-                const books = await ContentControllers.#sortContentByNew();
-                res.send({
-                    status: 'success',
-                    data: books,
-                });
-            } else if (sort === 'top') {
-                const token = totp(TOTP_KEY);
-                const response = await (await fetch('http://localhost:3001/content/stats', {
-                    headers: {
-                        'X-TOTP': token,
-                        'X-TOTP-Generation-Timestamp': Date.now(),
-                    },
-                })).json();
-                if (response.status === 'fail') {
-                    res.send(response);
-                    return;
-                }
-                const { data: scores } = response;
-                const books = await ContentControllers.#sortContentByNew();
-                books.sort((book1, book2) => (scores[book2._id] ?? 0) - (scores[book1._id] ?? 0));
-                res.send({
-                    status: 'success',
-                    data: books,
-                });
-            }
-        } catch (err) {
-            console.log(err);
+        if (sort === 'new') {
+            const books = await ContentControllers.#sortContentByNew();
             res.send({
-                status: 'error',
-                message: err.message,
+                status: 'success',
+                data: books,
+            });
+        } else if (sort === 'top') {
+            const token = totp(TOTP_KEY);
+            const response = await (await fetch('http://localhost:3001/content/stats', {
+                headers: {
+                    'X-TOTP': token,
+                    'X-TOTP-Generation-Timestamp': Date.now(),
+                },
+            })).json();
+            if (response.status === 'fail') {
+                next(new ApiError(response.status, response.data, response.message));
+                return;
+            }
+            const { data: scores } = response;
+            const books = await ContentControllers.#sortContentByNew();
+            books.sort((book1, book2) => (scores[book2._id] ?? 0) - (scores[book1._id] ?? 0));
+            res.send({
+                status: 'success',
+                data: books,
             });
         }
     }
 
     static async createContent(req, res) {
-        try {
-            const { content, publishedDate, userId } = req.body;
-            const newBook = await Book.create({
-                content,
-                publishedDate,
-                userId,
-            });
-            res.send({
-                status: 'success',
-                data: newBook,
-            });
-        } catch (err) {
-            res.send({
-                status: 'error',
-                message: err.message,
-            });
-        }
+        const { content, publishedDate, userId } = req.body;
+        const newBook = await Book.create({
+            content,
+            publishedDate,
+            userId,
+        });
+        res.send({
+            status: 'success',
+            data: newBook,
+        });
     }
 
     static async readContent(req, res) {
-        try {
-            const { contentId } = req.params;
-            const book = await Book.findById(contentId, { content: 1 });
-            res.send({
-                status: 'success',
-                data: book,
-            });
-        } catch (err) {
-            console.log(err);
-            res.send({
-                status: 'error',
-                message: err.message,
-            });
-        }
+        const { contentId } = req.params;
+        const book = await Book.findById(contentId, { content: 1 });
+        res.send({
+            status: 'success',
+            data: book,
+        });
     }
 
     static async updateContent(req, res) {
-        try {
-            const { content } = req.body;
-            const { contentId } = req.params;
-            const updates = Object.entries(content).reduce((acc, [key, val]) => {
-                acc[`content.${key}`] = val;
-                return acc;
-            }, {});
-            const newBook = await Book.findByIdAndUpdate(contentId, updates, { new: true });
-            res.send({
-                status: 'success',
-                data: newBook,
-            });
-        } catch (err) {
-            res.send({
-                status: 'error',
-                message: err.message,
-            });
-        }
+        const { content } = req.body;
+        const { contentId } = req.params;
+        const updates = Object.entries(content).reduce((acc, [key, val]) => {
+            acc[`content.${key}`] = val;
+            return acc;
+        }, {});
+        const newBook = await Book.findByIdAndUpdate(contentId, updates, { new: true });
+        res.send({
+            status: 'success',
+            data: newBook,
+        });
     }
 
     static async deleteContent(req, res) {
-        try {
-            const { contentId } = req.params;
-            const newBook = await Book.findByIdAndDelete(contentId);
-            res.send({
-                status: 'success',
-                data: newBook,
-            });
-        } catch (err) {
-            res.send({
-                status: 'error',
-                message: err.message,
-            });
-        }
+        const { contentId } = req.params;
+        const newBook = await Book.findByIdAndDelete(contentId);
+        res.send({
+            status: 'success',
+            data: newBook,
+        });
     }
 }
