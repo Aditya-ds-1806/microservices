@@ -62,6 +62,7 @@ export default class ContentControllers {
                 data: books,
             });
         }
+        next(new ApiError('fail', null, `Unknown sort option ${sort}`));
     }
 
     static async createContent(req, res) {
