@@ -5,7 +5,7 @@ import totp from 'totp-generator';
 import ApiError from '../middleware/Error.js';
 import { Book } from '../models/Content.js';
 
-dotenv.config({ path: 'routes/.env' });
+dotenv.config();
 
 const { TOTP_KEY } = process.env;
 

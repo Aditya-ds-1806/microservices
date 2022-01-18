@@ -3,7 +3,7 @@ import totp from 'totp-generator';
 import fetch from 'node-fetch';
 import ApiError from './Error.js';
 
-dotenv.config({ path: 'routes/.env' });
+dotenv.config();
 
 const { TOTP_KEY } = process.env;
 
