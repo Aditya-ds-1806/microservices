@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: "This is the API documentation for the coding assignment of Backend Intern role at Pratilipi. Three microservices have been designed: Content service, User Interaction service, and User service. Steps have been taken to "
+  description: "This is the User Interaction Service API documentation for the coding assignment of Backend Intern role at Pratilipi."
   version: "1.0.0"
   title: "User Interaction Service API"
   contact:
@@ -18,8 +18,8 @@ paths:
     get:
       tags:
       - "User Interaction Service"
-      summary: "Get number of reads on content by contentId"
-      description: "This is an internal API accessible only through the content service using a TOTP"
+      summary: "Get number of reads on all contents"
+      description: "This is an **internal** API accessible only through the content service using a TOTP"
       parameters:
       - name: "x-totp"
         type: "string"
@@ -33,7 +33,13 @@ paths:
       - "application/json"
       responses:
         "200":
-          description: "successful operation"
+          description: "successfully get likes+scores"
+        "400":
+          description: "mongoose `CastError` or `ValidationError`, bad inputs"
+        "401":
+          description: "request cannot be authorized, invalid TOTP"
+        "500":
+          description: "everything else"
   /content/reads/{contentId}:
     get:
       tags:
@@ -50,7 +56,13 @@ paths:
         type: "string"
       responses:
         "200":
-          description: "successful operation"
+          description: "successfully deleted user"
+        "400":
+          description: "invalid id, mongoose `CastError` or `ValidationError`, bad inputs"
+        "404":
+          description: "contentId not found"
+        "500":
+          description: "everything else"
     put:
       tags:
       - "User Interaction Service"
@@ -71,7 +83,13 @@ paths:
         type: "string"
       responses:
         "200":
-          description: "successful operation"
+          description: "successfully updated number of reads on content"
+        "400":
+          description: "invalid id, mongoose `CastError` or `ValidationError`, bad inputs"
+        "404":
+          description: "user not found/content not found"
+        "500":
+          description: "everything else"
   /content/likes/{contentId}:
     get:
       tags:
@@ -88,9 +106,13 @@ paths:
         type: "string"
       responses:
         "200":
-          description: "successful operation"
+          description: "successfully read number of likes"
         "400":
-          description: "Invalid Order"
+          description: "invalid id, mongoose `CastError` or `ValidationError`, bad inputs"
+        "404":
+          description: "user not found/content not found"
+        "500":
+          description: "everything else"
     put:
       tags:
       - "User Interaction Service"
@@ -111,9 +133,13 @@ paths:
         type: "string"
       responses:
         "200":
-          description: "successful operation"
+          description: "successfully updated likes on content"
         "400":
-          description: "Invalid Order"
+          description: "invalid id, mongoose `CastError` or `ValidationError`, bad inputs"
+        "404":
+          description: "user not found/content not found"
+        "500":
+          description: "everything else"
 definitions:
   UserInteraction:
     type: "object"
@@ -133,16 +159,12 @@ definitions:
           format: "mongoose.Schema.Types.ObjectId"
     xml:
       name: "User Interaction"
-  ApiResponse:
+  API Response:
     type: "object"
     properties:
-      code:
+      status:
         type: "integer"
-        format: "int32"
-      type:
-        type: "string"
+      data:
+        type: "object"
       message:
         type: "string"
-externalDocs:
-  description: "Find out more about Swagger"
-  url: "http://swagger.io"

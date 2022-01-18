@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: "This is the API documentation for the coding assignment of Backend Intern role at Pratilipi. Three microservices have been designed: Content service, User Interaction service, and User service. Steps have been taken to "
+  description: "This is the User Service API documentation for the coding assignment of Backend Intern role at Pratilipi."
   version: "1.0.0"
   title: "User Service API"
   contact:
@@ -27,13 +27,17 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Create user object"
+        description: "Create a user"
         required: true
         schema:
           $ref: "#/definitions/User"
       responses:
-        default:
-          description: "successful operation"
+        "200":
+          description: "successfully created user"
+        "400":
+          description: "mongoose `CastError` or `ValidationError`, bad inputs"
+        "500":
+          description: "everything else"
   /users/{userId}:
     get:
       tags:
@@ -45,16 +49,18 @@ paths:
       parameters:
       - name: "userId"
         in: "path"
-        description: ""
+        description: "Id of user to read"
         required: true
         type: "string"
       responses:
         "200":
-          description: "successful operation"
+          description: "successfully read user"
         "400":
-          description: "Invalid username supplied"
+          description: "mongoose `CastError` or `ValidationError`, bad inputs"
         "404":
-          description: "User not found"
+          description: "user not found"
+        "500":
+          description: "everything else"
     put:
       tags:
       - "User Service"
@@ -67,7 +73,7 @@ paths:
       parameters:
       - name: "userId"
         in: "path"
-        description: "name that need to be updated"
+        description: "Id of user to be updated"
         required: true
         type: "string"
       - in: "body"
@@ -77,10 +83,14 @@ paths:
         schema:
           $ref: "#/definitions/User"
       responses:
+        "200":
+          description: "successfully updated user"
         "400":
-          description: "Invalid user supplied"
+          description: "mongoose `CastError` or `ValidationError`, bad inputs"
         "404":
-          description: "User not found"
+          description: "user not found"
+        "500":
+          description: "everything else"
     delete:
       tags:
       - "User Service"
@@ -95,29 +105,18 @@ paths:
         required: true
         type: "string"
       responses:
+        "200":
+          description: "successfully deleted user"
         "400":
-          description: "Invalid username supplied"
+          description: "mongoose `CastError` or `ValidationError`, bad inputs"
         "404":
-          description: "User not found"
-securityDefinitions:
-  petstore_auth:
-    type: "oauth2"
-    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
-    flow: "implicit"
-    scopes:
-      write:pets: "modify pets in your account"
-      read:pets: "read your pets"
-  api_key:
-    type: "apiKey"
-    name: "api_key"
-    in: "header"
+          description: "user not found"
+        "500":
+          description: "everything else"
 definitions:
   User:
     type: "object"
     properties:
-      id:
-        type: "string"
-        format: "mongoose.Schema.Types.ObjectId"
       firstName:
         type: "string"
       lastName:
@@ -128,16 +127,12 @@ definitions:
         type: "string"
     xml:
       name: "User"
-  ApiResponse:
+  API Response:
     type: "object"
     properties:
-      code:
+      status:
         type: "integer"
-        format: "int32"
-      type:
-        type: "string"
+      data:
+        type: "object"
       message:
         type: "string"
-externalDocs:
-  description: "Find out more about Swagger"
-  url: "http://swagger.io"
