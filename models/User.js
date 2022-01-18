@@ -1,7 +1,10 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 import DBConnection from '../db.js';
 
-const dbUri = 'mongodb://127.0.0.1:27017/userService';
+dotenv.config();
+
+const dbUri = process.env.DB_3;
 const UserSchema = new mongoose.Schema({
     firstName: String,
     lastName: String,
