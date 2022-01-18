@@ -1,7 +1,12 @@
+import dotenv from 'dotenv';
 import ContentService from './services/ContentService.js';
 import UserInteractionService from './services/UserInteractionService.js';
 import UserService from './services/UserService.js';
 
-new ContentService(3000).register();
-new UserInteractionService(3001).register();
-new UserService(3002).register();
+dotenv.config();
+
+const { PORT_1, PORT_2, PORT_3 } = process.env;
+
+new ContentService(PORT_1).register();
+new UserInteractionService(PORT_2).register();
+new UserService(PORT_3).register();
