@@ -1,0 +1,148 @@
+swagger: "2.0"
+info:
+  description: "This is the API documentation for the coding assignment of Backend Intern role at Pratilipi. Three microservices have been designed: Content service, User Interaction service, and User service. Steps have been taken to "
+  version: "1.0.0"
+  title: "User Interaction Service API"
+  contact:
+    email: "esd18i001@iiitdm.ac.in"
+host: "127.0.0.1:3001"
+basePath: "/"
+tags:
+- name: "User Interaction Service"
+  description: "Read and update user interactions(likes and reads)"
+schemes:
+- "https"
+- "http"
+paths:
+  /content/stats:
+    get:
+      tags:
+      - "User Interaction Service"
+      summary: "Get number of reads on content by contentId"
+      description: "This is an internal API accessible only through the content service using a TOTP"
+      parameters:
+      - name: "x-totp"
+        type: "string"
+        in: "header"
+        description: "TOTP obtained from TOTP_KEY"
+      - name: "x-totp-generation-timestamp"
+        type: "string"
+        in: "header"
+        description: "TOTP generation timestamp"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "successful operation"
+  /content/reads/{contentId}:
+    get:
+      tags:
+      - "User Interaction Service"
+      summary: "Get number of reads on content by contentId"
+      description: ""
+      produces:
+      - "application/json"
+      parameters:
+      - name: "contentId"
+        in: "path"
+        description: "Id of the content to count reads"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+    put:
+      tags:
+      - "User Interaction Service"
+      summary: "Update number of reads on content by contentId"
+      description: ""
+      produces:
+      - "application/json"
+      parameters:
+      - name: "contentId"
+        in: "path"
+        description: "ID of content to update read count"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "query"
+        description: "Id of the user who liked"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+  /content/likes/{contentId}:
+    get:
+      tags:
+      - "User Interaction Service"
+      summary: "Get number of likes on content by contentId"
+      description: ""
+      produces:
+      - "application/json"
+      parameters:
+      - name: "contentId"
+        in: "path"
+        description: "ID of content to count likes"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+        "400":
+          description: "Invalid Order"
+    put:
+      tags:
+      - "User Interaction Service"
+      summary: "Update number of likes on content by contentId"
+      description: ""
+      produces:
+      - "application/json"
+      parameters:
+      - name: "contentId"
+        in: "path"
+        description: "ID of content to like/dislike"
+        required: true
+        type: "string"
+      - name: "userId"
+        in: "query"
+        description: "ID of user who liked/disliked"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+        "400":
+          description: "Invalid Order"
+definitions:
+  UserInteraction:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "mongoose.Schema.Types.ObjectId"
+      likes:
+        type: "array"
+        items:
+          type: "string"
+          format: "mongoose.Schema.Types.ObjectId"
+      reads:
+        type: "array"
+        items:
+          type: "string"
+          format: "mongoose.Schema.Types.ObjectId"
+    xml:
+      name: "User Interaction"
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

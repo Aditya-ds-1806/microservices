@@ -1,0 +1,143 @@
+swagger: "2.0"
+info:
+  description: "This is the API documentation for the coding assignment of Backend Intern role at Pratilipi. Three microservices have been designed: Content service, User Interaction service, and User service. Steps have been taken to "
+  version: "1.0.0"
+  title: "User Service API"
+  contact:
+    email: "esd18i001@iiitdm.ac.in"
+host: "127.0.0.1:3002"
+basePath: "/"
+tags:
+- name: "User Service"
+  description: "CRUD Users"
+schemes:
+- "https"
+- "http"
+paths:
+  /users:
+    post:
+      tags:
+      - "User Service"
+      summary: "Create user"
+      description: ""
+      consumes:
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Create user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+  /users/{userId}:
+    get:
+      tags:
+      - "User Service"
+      summary: "Read user by userId"
+      description: ""
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: ""
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+    put:
+      tags:
+      - "User Service"
+      summary: "Update user by userId"
+      description: ""
+      consumes:
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "name that need to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "updates"
+        description: "Updated user object, a sub-schema of the following schema also works"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "400":
+          description: "Invalid user supplied"
+        "404":
+          description: "User not found"
+    delete:
+      tags:
+      - "User Service"
+      summary: "Delete user by userId"
+      description: ""
+      produces:
+      - "application/json"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "The id of the user to be deleted"
+        required: true
+        type: "string"
+      responses:
+        "400":
+          description: "Invalid username supplied"
+        "404":
+          description: "User not found"
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "mongoose.Schema.Types.ObjectId"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      emailId:
+        type: "string"
+      phoneNumber:
+        type: "string"
+    xml:
+      name: "User"
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"

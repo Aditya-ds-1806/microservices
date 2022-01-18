@@ -1,0 +1,175 @@
+swagger: "2.0"
+info:
+  description: "This is the API documentation for the coding assignment of Backend Intern role at Pratilipi. Three microservices have been designed: Content service, User Interaction service, and User service. Steps have been taken to "
+  version: "1.0.0"
+  title: "Content Service API"
+  contact:
+    email: "esd18i001@iiitdm.ac.in"
+host: "127.0.0.1:3000"
+basePath: "/"
+tags:
+- name: "Content Service"
+  description: "CRUD contents and sort contents by date and user interaction(likes and reads)"
+schemes:
+- "https"
+- "http"
+paths:
+  /content:
+    put:
+      tags:
+      - "Content Service"
+      summary: "Bulk Insert content to DB from .csv file"
+      description: ""
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "formData"
+        name: "file"
+        type: "file"
+        description: "A CSV file that contains 4 header fields in any order: `userId`, `title`, `story`, `publishedDate`"
+        required: true
+      responses:
+        "405":
+          description: "Invalid input"
+    get:
+      tags:
+      - "Content Service"
+      summary: "List all contents in DB"
+      description: ""
+      parameters:
+      - in: "query"
+        name: "sort"
+        type: "array"
+        items:
+          type: string
+          enum:
+          - "new"
+          - "top"
+        description: "Specify sorting order"
+        required: true
+      produces:
+      - "application/json"
+      responses:
+        "405":
+          description: "Invalid input"
+    post:
+      tags:
+      - "Content Service"
+      summary: "Create new content"
+      description: ""
+      consumes:
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user details"
+        description: "Content object that needs to be added to the DB"
+        required: true
+        schema:
+          $ref: "#/definitions/Content"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+        "405":
+          description: "Validation exception"
+  /content/{contentId}:
+    get:
+      tags:
+      - "Content Service"
+      summary: "Read content by contentId"
+      description: "Returns a single content by ID"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "contentId"
+        in: "path"
+        description: "ID of the content to return"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+    put:
+      tags:
+      - "Content Service"
+      summary: "Update content by contentId"
+      description: ""
+      consumes:
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "contentId"
+        in: "path"
+        description: "ID of content that needs to be updated"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "update object"
+        schema:
+          $ref: "#/definitions/Content"
+        in: "body"
+        description: "Properties of the content to be updated, a subset of the below schema also works"
+        required: false
+      responses:
+        "405":
+          description: "Invalid input"
+    delete:
+      tags:
+      - "Content Service"
+      summary: "Delete content by contentId"
+      description: ""
+      produces:
+      - "application/json"
+      parameters:
+      - name: "contentId"
+        in: "path"
+        description: "Content Id to delete"
+        required: true
+        type: "string"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+definitions:
+  Content:
+    type: "object"
+    required:
+    - "userId"
+    - "title"
+    - "story"
+    properties:
+      userId:
+        type: "string"
+      publishedDate:
+        type: "string"
+        format: "Date"
+      title:
+        type: "string"
+      story:
+        type: "string"
+    xml:
+      name: "Content"
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
