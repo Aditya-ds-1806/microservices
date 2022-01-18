@@ -24,8 +24,6 @@ export default class UserInteractionService {
 
         app.use(UserInteractionRouter);
 
-        app.all('*', (req, res) => res.send('404 Not Found!'));
-
         return app.listen(this.port, process.env.IP, () => {
             console.log(`User interaction service started: http://localhost:${this.port}`);
         });

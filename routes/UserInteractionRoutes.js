@@ -2,6 +2,7 @@ import { Router } from 'express';
 import asyncHandler from 'express-async-handler';
 import UserInteractionMiddleware from '../middleware/UserInteraction.js';
 import UserInteractionControllers from '../controllers/UserInteractionControllers.js';
+import ApiError from '../middleware/Error.js';
 
 const UserInteractionRouter = new Router();
 const {
@@ -16,6 +17,7 @@ UserInteractionRouter.put('/content/reads/:contentId', asyncHandler(existsUser),
 UserInteractionRouter.get('/content/likes/:contentId', asyncHandler(existsContent), asyncHandler(readLikes));
 UserInteractionRouter.put('/content/likes/:contentId', asyncHandler(existsUser), asyncHandler(existsContent), asyncHandler(updateLikes));
 UserInteractionRouter.get('/content/stats', checkTOTP, asyncHandler(readStats));
+UserInteractionRouter.all('*', (req, res, next) => next(new ApiError(404, null, '404 Not Found!')));
 
 UserInteractionRouter.use(errorHandler);
 
