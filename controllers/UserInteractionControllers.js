@@ -4,12 +4,16 @@ import { UserInteraction } from '../models/UserInteraction.js';
 export default class UserInteractionControllers {
     static async readReads(req, res) {
         const { contentId } = req.params;
-        const reads = await UserInteraction.findOne({ contentId }, { reads: 1 });
+        const result = await UserInteraction
+            .aggregate()
+            .match({ contentId: mongoose.Types.ObjectId(contentId) })
+            .project({ reads: { $size: '$reads' } })
+            .exec();
         res.send({
             status: 200,
             data: {
                 contentId,
-                reads: reads ?? 0,
+                reads: result?.[0]?.reads ?? 0,
             },
         });
     }
@@ -28,12 +32,16 @@ export default class UserInteractionControllers {
 
     static async readLikes(req, res) {
         const { contentId } = req.params;
-        const likes = await UserInteraction.findOne({ contentId }, { likes: 1 });
+        const result = await UserInteraction
+            .aggregate()
+            .match({ contentId: mongoose.Types.ObjectId(contentId) })
+            .project({ likes: { $size: '$likes' } })
+            .exec();
         res.send({
             status: 200,
             data: {
                 contentId,
-                likes: likes ?? 0,
+                likes: result?.[0]?.likes ?? 0,
             },
         });
     }
