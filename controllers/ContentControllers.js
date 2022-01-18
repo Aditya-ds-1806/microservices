@@ -10,7 +10,8 @@ dotenv.config({ path: 'routes/.env' });
 const { TOTP_KEY } = process.env;
 
 export default class ContentControllers {
-    static async bulkInsert(req, res) {
+    static async bulkInsert(req, res, next) {
+        if (!req.files) next(new ApiError(400, null, 'csv file not found'));
         const csvString = req.files.file.data.toString('utf8');
         const books = (await csv().fromString(csvString)).reduce((acc, book) => {
             acc.push({
