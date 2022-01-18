@@ -1,4 +1,8 @@
 import express from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import mongoSanitize from 'express-mongo-sanitize';
+import { rateLimit } from 'express-rate-limit';
 import UserRouter from '../routes/UserRoutes.js';
 
 export default class UserService {
@@ -9,8 +13,13 @@ export default class UserService {
     register() {
         const app = express();
 
+        app.use(helmet());
+        app.use(cors());
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
+        app.use(mongoSanitize());
+        app.use(rateLimit());
+
         app.use(UserRouter);
 
         app.get('*', (req, res) => res.send('404 Not Found!'));
