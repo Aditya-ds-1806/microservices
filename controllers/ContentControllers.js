@@ -50,7 +50,7 @@ export default class ContentControllers {
                     'X-TOTP-Generation-Timestamp': Date.now(),
                 },
             })).json();
-            if (response.status === 'fail') {
+            if (response.status === 401) {
                 next(new ApiError(response.status, response.data, response.message));
                 return;
             }
@@ -62,7 +62,7 @@ export default class ContentControllers {
                 data: books,
             });
         }
-        next(new ApiError('fail', null, `Unknown sort option ${sort}`));
+        next(new ApiError(400, null, `Unknown sort option ${sort}`));
     }
 
     static async createContent(req, res) {

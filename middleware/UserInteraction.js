@@ -15,7 +15,7 @@ export default class UserInteractionMiddleware {
         if (calculatedTotp === receivedTotp) {
             next();
         } else {
-            next(new ApiError('fail', { receivedTotp }, 'Authentication failure! Invalid TOTP received.'));
+            next(new ApiError(401, { receivedTotp }, 'Authentication failure! Invalid TOTP received.'));
         }
     }
 
@@ -26,7 +26,7 @@ export default class UserInteractionMiddleware {
             next();
             return;
         }
-        res.send(response);
+        next(new ApiError(response.status, response.data, response.message));
     }
 
     static async existsContent(req, res, next) {
@@ -36,14 +36,14 @@ export default class UserInteractionMiddleware {
             next();
             return;
         }
-        res.send(response);
+        next(new ApiError(response.status, response.data, response.message));
     }
 
     // eslint-disable-next-line no-unused-vars
     static errorHandler(err, req, res, next) {
         console.log(err);
         res.send({
-            status: err.statusText ?? 'fail',
+            status: (err.name === 'CastError' || err.name === 'ValidationError') ? 400 : (err.status ?? 500),
             message: err.message ?? 'Internal server error',
             data: err.data ?? null,
         });
