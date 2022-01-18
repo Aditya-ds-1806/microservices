@@ -1,6 +1,7 @@
 import helmet from 'helmet';
 import express from 'express';
 import cors from 'cors';
+import xss from 'xss-clean';
 import { rateLimit } from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
 import UserInteractionRouter from '../routes/UserInteractionRoutes.js';
@@ -17,6 +18,7 @@ export default class UserInteractionService {
         app.use(cors());
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
+        app.use(xss());
         app.use(mongoSanitize());
         app.use(rateLimit());
 
