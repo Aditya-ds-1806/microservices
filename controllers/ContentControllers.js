@@ -1,8 +1,11 @@
 import csv from 'csvtojson';
 import fetch from 'node-fetch';
+import dotenv from 'dotenv';
 import totp from 'totp-generator';
 import ApiError from '../middleware/Error.js';
 import { Book } from '../models/Content.js';
+
+dotenv.config({ path: 'routes/.env' });
 
 const { TOTP_KEY } = process.env;
 
@@ -61,8 +64,9 @@ export default class ContentControllers {
                 status: 'success',
                 data: books,
             });
+        } else {
+            next(new ApiError(400, null, `Unknown sort option ${sort}`));
         }
-        next(new ApiError(400, null, `Unknown sort option ${sort}`));
     }
 
     static async createContent(req, res) {

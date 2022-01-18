@@ -1,10 +1,7 @@
 import { Router } from 'express';
 import asyncHandler from 'express-async-handler';
-import dotenv from 'dotenv';
 import UserInteractionMiddleware from '../middleware/UserInteraction.js';
 import UserInteractionControllers from '../controllers/UserInteractionControllers.js';
-
-dotenv.config({ path: 'routes/.env' });
 
 const UserInteractionRouter = new Router();
 const {

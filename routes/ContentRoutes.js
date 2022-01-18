@@ -1,11 +1,8 @@
 import { Router } from 'express';
 import asyncHandler from 'express-async-handler';
 import fileUpload from 'express-fileupload';
-import dotenv from 'dotenv';
 import ContentMiddleware from '../middleware/Content.js';
 import ContentControllers from '../controllers/ContentControllers.js';
-
-dotenv.config({ path: 'routes/.env' });
 
 const ContentRouter = new Router();
 const { existsUser, existsContent, errorHandler } = ContentMiddleware;
