@@ -6,7 +6,7 @@ export default class UserInteractionControllers {
         const { contentId } = req.params;
         const reads = await UserInteraction.findOne({ contentId }, { reads: 1 });
         res.send({
-            status: 'success',
+            status: 200,
             data: {
                 contentId,
                 reads: reads ?? 0,
@@ -21,7 +21,7 @@ export default class UserInteractionControllers {
             $addToSet: { reads: userId },
         }, { new: true, upsert: true });
         res.send({
-            status: 'success',
+            status: 200,
             data: reads,
         });
     }
@@ -30,7 +30,7 @@ export default class UserInteractionControllers {
         const { contentId } = req.params;
         const likes = await UserInteraction.findOne({ contentId }, { likes: 1 });
         res.send({
-            status: 'success',
+            status: 200,
             data: {
                 contentId,
                 likes: likes ?? 0,
@@ -53,7 +53,7 @@ export default class UserInteractionControllers {
             upsert: true,
         });
         res.send({
-            status: 'success',
+            status: 200,
             data: likes,
         });
     }
@@ -65,7 +65,7 @@ export default class UserInteractionControllers {
             return acc;
         }, {});
         res.send({
-            status: 'success',
+            status: 200,
             data: topMetric,
         });
     }

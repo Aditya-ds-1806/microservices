@@ -26,7 +26,7 @@ export default class ContentControllers {
         }, []);
         const newBooks = await Book.insertMany(books);
         res.send({
-            status: 'success',
+            status: 200,
             data: newBooks,
         });
     }
@@ -43,7 +43,7 @@ export default class ContentControllers {
         if (sort === 'new') {
             const books = await ContentControllers.#sortContentByNew();
             res.send({
-                status: 'success',
+                status: 200,
                 data: books,
             });
         } else if (sort === 'top') {
@@ -62,7 +62,7 @@ export default class ContentControllers {
             const books = await ContentControllers.#sortContentByNew();
             books.sort((book1, book2) => (scores[book2._id] ?? 0) - (scores[book1._id] ?? 0));
             res.send({
-                status: 'success',
+                status: 200,
                 data: books,
             });
         } else {
@@ -78,7 +78,7 @@ export default class ContentControllers {
             userId,
         });
         res.send({
-            status: 'success',
+            status: 200,
             data: newBook,
         });
     }
@@ -87,7 +87,7 @@ export default class ContentControllers {
         const { contentId } = req.params;
         const book = await Book.findById(contentId, { content: 1 });
         res.send({
-            status: 'success',
+            status: 200,
             data: book,
         });
     }
@@ -101,7 +101,7 @@ export default class ContentControllers {
         }, {});
         const newBook = await Book.findByIdAndUpdate(contentId, updates, { new: true });
         res.send({
-            status: 'success',
+            status: 200,
             data: newBook,
         });
     }
@@ -110,7 +110,7 @@ export default class ContentControllers {
         const { contentId } = req.params;
         const newBook = await Book.findByIdAndDelete(contentId);
         res.send({
-            status: 'success',
+            status: 200,
             data: newBook,
         });
     }

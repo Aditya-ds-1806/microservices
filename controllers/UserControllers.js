@@ -12,7 +12,7 @@ export default class UserController {
             phoneNumber,
         });
         res.send({
-            status: 'success',
+            status: 200,
             data: newUser,
         });
     }
@@ -21,7 +21,7 @@ export default class UserController {
         const { userId } = req.params;
         const user = await User.findById(userId);
         res.send({
-            status: 'success',
+            status: 200,
             data: user,
         });
     }
@@ -30,7 +30,7 @@ export default class UserController {
         const { userId } = req.params;
         const updatedUser = await User.findByIdAndUpdate(userId, req.body, { new: true });
         res.send({
-            status: 'success',
+            status: 200,
             data: updatedUser,
         });
     }
@@ -39,7 +39,7 @@ export default class UserController {
         const { userId } = req.params;
         const deletedUser = await User.findByIdAndDelete(userId);
         res.send({
-            status: 'success',
+            status: 200,
             data: deletedUser,
         });
     }
