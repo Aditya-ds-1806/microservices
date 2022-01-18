@@ -20,7 +20,8 @@
     "helmet": "^5.0.1",
     "mongoose": "^6.1.6",
     "node-fetch": "^3.1.0",
-    "totp-generator": "^0.0.13"
+    "totp-generator": "^0.0.13",
+    "xss-clean": "^0.1.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.0.2",
