@@ -5,7 +5,9 @@ import ApiError from './Error.js';
 
 dotenv.config();
 
-const { TOTP_KEY } = process.env;
+const {
+    TOTP_KEY, HOST, PORT_1, PORT_3,
+} = process.env;
 
 export default class UserInteractionMiddleware {
     static checkTOTP(req, res, next) {
@@ -21,7 +23,7 @@ export default class UserInteractionMiddleware {
 
     static async existsUser(req, res, next) {
         const { userId } = req.query;
-        const response = await (await fetch(`http://localhost:3002/users/${userId}`)).json();
+        const response = await (await fetch(`http://${HOST}:${PORT_3}/users/${userId}`)).json();
         if (response.data) {
             next();
             return;
@@ -31,7 +33,7 @@ export default class UserInteractionMiddleware {
 
     static async existsContent(req, res, next) {
         const { contentId } = req.params;
-        const response = await (await fetch(`http://localhost:3000/content/${contentId}`)).json();
+        const response = await (await fetch(`http://${HOST}:${PORT_1}/content/${contentId}`)).json();
         if (response.data) {
             next();
             return;

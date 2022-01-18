@@ -1,7 +1,12 @@
 import mongoose from 'mongoose';
 import fetch from 'node-fetch';
+import dotenv from 'dotenv';
 import { Book } from '../models/Content.js';
 import ApiError from './Error.js';
+
+dotenv.config();
+
+const { HOST, PORT_3 } = process.env;
 
 export default class ContentMiddleware {
     static async existsContent(req, res, next) {
@@ -19,7 +24,7 @@ export default class ContentMiddleware {
 
     static async existsUser(req, res, next) {
         const { userId } = req.body;
-        const response = await (await fetch(`http://localhost:3002/users/${userId}`)).json();
+        const response = await (await fetch(`http://${HOST}:${PORT_3}/users/${userId}`)).json();
         if (response.data) {
             next();
             return;

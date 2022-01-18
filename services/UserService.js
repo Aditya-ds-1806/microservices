@@ -4,7 +4,10 @@ import cors from 'cors';
 import xss from 'xss-clean';
 import mongoSanitize from 'express-mongo-sanitize';
 import { rateLimit } from 'express-rate-limit';
+import dotenv from 'dotenv';
 import UserRouter from '../routes/UserRoutes.js';
+
+dotenv.config();
 
 export default class UserService {
     constructor(port) {
@@ -25,7 +28,8 @@ export default class UserService {
         app.use(UserRouter);
 
         return app.listen(this.port, process.env.IP, () => {
-            console.log(`User service started: http://localhost:${this.port}`);
+            const { HOST } = process.env;
+            console.log(`User service started: http://${HOST}:${this.port}`);
         });
     }
 }

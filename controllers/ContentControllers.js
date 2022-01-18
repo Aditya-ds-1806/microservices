@@ -7,7 +7,7 @@ import { Book } from '../models/Content.js';
 
 dotenv.config();
 
-const { TOTP_KEY } = process.env;
+const { TOTP_KEY, HOST, PORT_2 } = process.env;
 
 export default class ContentControllers {
     static async bulkInsert(req, res, next) {
@@ -48,7 +48,7 @@ export default class ContentControllers {
             });
         } else if (sort === 'top') {
             const token = totp(TOTP_KEY);
-            const response = await (await fetch('http://localhost:3001/content/stats', {
+            const response = await (await fetch(`http://${HOST}:${PORT_2}/content/stats`, {
                 headers: {
                     'X-TOTP': token,
                     'X-TOTP-Generation-Timestamp': Date.now(),

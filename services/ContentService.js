@@ -4,7 +4,10 @@ import cors from 'cors';
 import xss from 'xss-clean';
 import { rateLimit } from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
+import dotenv from 'dotenv';
 import contentRouter from '../routes/ContentRoutes.js';
+
+dotenv.config();
 
 export default class UserInteractionService {
     constructor(port) {
@@ -25,7 +28,8 @@ export default class UserInteractionService {
         app.use(contentRouter);
 
         return app.listen(this.port, process.env.IP, () => {
-            console.log(`Content service started: http://localhost:${this.port}`);
+            const { HOST } = process.env;
+            console.log(`Content service started: http://${HOST}:${this.port}`);
         });
     }
 }
