@@ -6,10 +6,22 @@ dotenv.config();
 
 const dbUri = process.env.DB_3;
 const UserSchema = new mongoose.Schema({
-    firstName: String,
-    lastName: String,
-    phoneNumber: String,
-    emailId: String,
+    firstName: {
+        type: String,
+        required: true,
+    },
+    lastName: {
+        type: String,
+        required: true,
+    },
+    phoneNumber: {
+        type: String,
+        required: true,
+    },
+    emailId: {
+        type: String,
+        required: true,
+    },
 });
 
 const conn = new DBConnection(dbUri).connect();

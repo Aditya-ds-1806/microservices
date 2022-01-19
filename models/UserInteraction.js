@@ -6,7 +6,10 @@ dotenv.config();
 
 const dbUri = process.env.DB_2;
 const UserInteractionSchema = new mongoose.Schema({
-    contentId: mongoose.Schema.Types.ObjectId,
+    contentId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+    },
     likes: [mongoose.Schema.Types.ObjectId],
     reads: [mongoose.Schema.Types.ObjectId],
 });
