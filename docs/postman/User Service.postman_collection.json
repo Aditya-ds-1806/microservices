@@ -1,0 +1,165 @@
+{
+	"info": {
+		"_postman_id": "e66d4b19-431d-4003-87e2-5497f63705b9",
+		"name": "User Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "insert user",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "default",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "firstName",
+							"value": "<script>alert('danger');</script>",
+							"type": "default"
+						},
+						{
+							"key": "lastName",
+							"value": "DS",
+							"type": "default"
+						},
+						{
+							"key": "emailId",
+							"value": "cc@cc.com",
+							"type": "default"
+						},
+						{
+							"key": "phoneNumber",
+							"value": "9449089494",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3002/users/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "read user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3002/users/61e6ff4fc1c0c965731e7a31",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"users",
+						"61e6ff4fc1c0c965731e7a31"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update user",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "firstName",
+							"value": "Aditya",
+							"type": "default"
+						},
+						{
+							"key": "emailId",
+							"value": "esd18i001@iiitdm.ac.in",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3002/users/61e77c331039502073ef937e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"users",
+						"61e77c331039502073ef937e"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete user",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3002/users/61e6ff4fc1c0c965731e7a31",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"users",
+						"61e6ff4fc1c0c965731e7a31"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3002/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

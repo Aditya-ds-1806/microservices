@@ -1,0 +1,148 @@
+{
+	"info": {
+		"_postman_id": "9bc58e51-7ba3-471f-b439-c0e730c7617f",
+		"name": "User Interaction Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Read likes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/content/likes/61e26f41474c3fb45dbbf63a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"content",
+						"likes",
+						"61e26f41474c3fb45dbbf63a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update likes",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/content/likes/61e26f41474c3fb45dbbf63e?likeState=1&userId=61e26fc3474c3fb45dbbf64e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"content",
+						"likes",
+						"61e26f41474c3fb45dbbf63e"
+					],
+					"query": [
+						{
+							"key": "likeState",
+							"value": "1"
+						},
+						{
+							"key": "userId",
+							"value": "61e26fc3474c3fb45dbbf64e"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read reads",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/content/reads/61e26f41474c3fb45dbbf63a",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"content",
+						"reads",
+						"61e26f41474c3fb45dbbf63a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update reads",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/content/reads/61e26f41474c3fb45dbbf63a?userId=61e26fc3474c3fb45dbbf64e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"content",
+						"reads",
+						"61e26f41474c3fb45dbbf63a"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "61e26fc3474c3fb45dbbf64e"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get book stats (internal)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/content/stats",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"content",
+						"stats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

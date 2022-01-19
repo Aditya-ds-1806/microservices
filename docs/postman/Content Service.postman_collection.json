@@ -1,0 +1,209 @@
+{
+	"info": {
+		"_postman_id": "f05dcc49-8797-47d2-98af-0f3e0624db80",
+		"name": "Content Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "insert book",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "content[title]",
+							"value": "Sherlock Holmes",
+							"type": "default"
+						},
+						{
+							"key": "content[story]",
+							"value": "Lorem ipsum dolor sit amet consectutur",
+							"type": "default"
+						},
+						{
+							"key": "userId",
+							"value": "61e77c331039502073ef937e",
+							"type": "default"
+						},
+						{
+							"key": "publishedDate",
+							"value": "2022-01-01T15:09:49.171Z",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/content/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"content",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list all books",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/content/?sort=top",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"content",
+						""
+					],
+					"query": [
+						{
+							"key": "sort",
+							"value": "top"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list one book",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/content/61e6f7e307f65541b356a277",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"content",
+						"61e6f7e307f65541b356a277"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update book",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "content[title]",
+							"value": "3 men in a boat",
+							"type": "default"
+						},
+						{
+							"key": "content[story]",
+							"value": "worst ever",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/content/61e6f7e307f65541b356a277",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"content",
+						"61e6f7e307f65541b356a277"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete book",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:3000/content/61e77c771039502073ef9385",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"content",
+						"61e77c771039502073ef9385"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "dump csv to db",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"contentType": "",
+							"type": "file",
+							"src": "/C:/Users/91948/Desktop/MOCK_DATA.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/content/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"content",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "404",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
