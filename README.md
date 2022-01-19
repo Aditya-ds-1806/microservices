@@ -95,3 +95,8 @@ docker-compose up
   - read and update likes count
   - read and update reads count
   - internal API for returning likes and reads count on content to assist in sorting by `top`
+
+## Developer Empathy
+
+- Used conventional commits, husky and commitlint to write meaningful and organized commit messages
+- Used eslint to enforce code style and check for errors
