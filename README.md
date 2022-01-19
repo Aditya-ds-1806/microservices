@@ -45,3 +45,53 @@ cd pratilipi-assignment
 docker-compose build
 docker-compose up
 ```
+
+## HLD
+
+- `DBConnection` class - handle DB connection
+- `UserSchema`, `ContentSchema`, `UserInteractionSchema` - define schemas for DB
+- `UserInteractionService`, `ContentService` and `UserService` - 3 workers to handle service registration
+- `ContentRoutes`, `UserRoutes`, `UserInteractionRoutes` - define endpoints for microservices
+- `ContentControllers`, `UserControllers`, `UserInteractionControllers` - handle business logic and return responses; if error forward to error handler
+- `ContentMiddleware`, `UserMiddleware`, `UserInteractionMiddleware` to manipulate and validate requests; don't return responses, forward errors to error handler
+- `APiError` - Error handler; extends native Error; Single point of entry for sending 4xx and 5xx errors
+
+## LLD
+
+### Content Service
+
+- Middlewares
+  - check if userId is valid and user exists by contacting user service
+  - check if contentId is valid and content exists
+  - error handler
+
+- Controllers
+  - a controller each for CRUD on contents
+  - sort contents by top and new
+  - contact user interaction service's internal API that is secured via TOTP, to fetch likes and reads, and sort contents by `top` defined as `(reads + likes)`
+  - `TOTP_KEY` used for generating `TOTP`s is agreed upon before hand by the 2 services and `TOTP` sent in headers
+  - controller for inserting documents to DB from csv file
+  - internal method to sort by new, result is reused for sorting by `top`
+
+### User Service
+
+- Middlewares
+  - check if userId is valid and user exists
+  - check if contentId is valid and content exists by contacting content service
+  - error handler
+
+- Controllers
+  - a controller each for CRUD on User
+
+### User Interaction Service
+
+- Middlewares
+  - check if userId is valid and user exists by contacting user service
+  - check if contentId is valid and content exists by contacting content service
+  - validate recieved `TOTP` for `content/stats` endpoint, send `401` if the `TOTP`s don't match
+  - error handler
+
+- Controllers
+  - read and update likes count
+  - read and update reads count
+  - internal API for returning likes and reads count on content to assist in sorting by `top`
