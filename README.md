@@ -1,4 +1,4 @@
-# Pratilipi Coding Assignment Backend Intern Role
+# Microservices Project
 
 ## Environment variables
 
@@ -31,8 +31,8 @@ DB_3=mongodb://mongo:27017/userService
 ### via NPM
 
 ```bash
-git clone https://github.com/Aditya-ds-1806/pratilipi-assignment.git
-cd pratilipi-assignment
+git clone https://github.com/Aditya-ds-1806/microservices.git
+cd microservices
 npm i
 npm start
 ```
@@ -40,8 +40,8 @@ npm start
 ### via Docker
 
 ```bash
-git clone https://github.com/Aditya-ds-1806/pratilipi-assignment.git
-cd pratilipi-assignment
+git clone https://github.com/Aditya-ds-1806/microservices.git
+cd microservices
 docker-compose build
 docker-compose up
 ```
